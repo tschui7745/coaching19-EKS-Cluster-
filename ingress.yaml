@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tschui-echo-app-ingress
+  namespace: tschui-eks-activity
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    external-dns.alpha.kubernetes.io/hostname: "tschui-echoapp.sctp-sandbox.com" # Route53 Record
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - "tschui-echoapp.sctp-sandbox.com" # Route53 Record
+      secretName: tschui-tls
+  rules:
+  - host: "tschui-echoapp.sctp-sandbox.com" # Route53 Record
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: tschui-echo-service
+            port:
+              number: 80

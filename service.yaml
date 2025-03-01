@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tschui-echo-service
+  namespace: tschui-eks-activity
+spec:
+  selector:
+    app: echo-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5678
+kind: Pod
+metadata:
+  name: netshoot
+  namespace: tschui-eks-activity
+spec:
+  containers:
+  - name: netshoot
+    image: nicolaka/netshoot
+    command: ["/bin/bash"]
+    args: ["-c", "while true; do ping localhost; sleep 60;done"]
